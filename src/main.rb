@@ -1,5 +1,12 @@
 ["libGraphs/GrafoNoDirigido", "libGraphs/DFS"].each {|file| require_relative file }
 
+# Formatos aceptados por el cliente
+# INICIALIZAR
+# AGREGAR <nodo> <ciudad> <personas>
+# AGREGAR <arista> <nodo1> <nodo2>
+# BUSCAR <ciudad> <personas>
+# SALIR
+
 miGrafo = GrafoNoDirigido.new
 
 arista = Arista.new(3,2)
