@@ -11,11 +11,14 @@ class DFS
     @visited = Set.new
   end
 
+  ##
   def search(el)
     # Vacía el conjunto de visitados
     @graph.nodes.each do |u|
       if !@visited.member?(u)
-        dfs_visit(u, el)
+        if dfs_visit(u, el)
+          return true
+        end
       end
     end
   end
@@ -24,7 +27,7 @@ class DFS
     @visited.add(u)
 
     if u.value == el
-      puts "¡Encotrado! #{u}"
+      puts "¡Encontrado! #{u}"
       return u
     end
 
@@ -32,7 +35,7 @@ class DFS
     # Itera sobre todos los adyacentes y los visita recursivamente
     @graph.adjacents(u).each do |v|
       if !@visited.member?(v)
-        dfs_visit(u, el)
+        dfs_visit(v, el)
       end
     end
 

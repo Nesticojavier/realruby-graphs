@@ -94,7 +94,7 @@ if __FILE__ == $PROGRAM_NAME
         INFO
         puts "Si introduce más parámetros, no serán considerados"
       else
-        pc_to_seach = PC.new(input[1], input[2])
+        pc_to_search = PC.new(input[1], input[2])
         @dfs.search(pc_to_search)
       end
 

@@ -1,1 +1,19 @@
 INICIALIZAR
+AGREGAR NODO fer mac m1
+AGREGAR NODO chus mac m2
+AGREGAR NODO maria mac m1
+AGREGAR NODO pedro hp i5
+AGREGAR NODO jose hp i7
+AGREGAR NODO juan hp i9
+AGREGAR NODO amigo hp i11
+AGREGAR NODO stevejobs mac m3
+AGREGAR ARISTA fer chus
+AGREGAR ARISTA chus maria
+AGREGAR ARISTA pedro jose
+AGREGAR ARISTA fer pedro
+AGREGAR ARISTA fer jose
+AGREGAR ARISTA jose juan
+AGREGAR ARISTA juan amigo
+AGREGAR ARISTA amigo stevejobs
+MOSTRAR
+BUSCAR mac m3

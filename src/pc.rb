@@ -11,16 +11,30 @@ class PC
   end
 
   ##
-  # Retorna una representación en forma de string de la PC como Marca: Modelo.
-  def to_s
-    return "#{@brand}: #{@model}"
-  end
-
-  ##
   # Retorna true si la PC es igual a otra PC, es decir, de la misma marca
   # y modelo.
   def ==(other_object)
     return false unless other_object.instance_of?(PC)
     @brand == other_object.brand && @model == other_object.model
   end
+
+  ##
+  # Implementación de eql? para PC.
+  def eql?(other)
+    self == other
+   end
+
+  ##
+  # Retorna el hash del objeto
+  def hash
+    @brand.hash + @model.hash
+  end
+
+  ##
+  # Retorna una representación en forma de string de la PC como Marca: Modelo.
+  def to_s
+    return "#{@brand}: #{@model}"
+  end
+
+
 end
