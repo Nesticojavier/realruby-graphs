@@ -1,93 +1,112 @@
-["libGraphs/GrafoNoDirigido", "libGraphs/DFS"].each {|file| require_relative file }
+require_relative "rubynetx/graph"
+require_relative "rubynetx/node"
+require_relative "rubynetx/dfs"
+require_relative "pc"
 
-# funcion auxiliar para verificar si es entero
-def is_integer(a)
-    return a.to_i.to_s == a
-end
+if __FILE__ == $PROGRAM_NAME
+  puts <<-BIENVENIDA
+  =============================================================
+  Bienvenido al registro de computadoras de la red del LDC
+  donde la red está descrita por un grafo no dirigido donde se
+  puede añadir y buscar computadoras en la red como nodos en el
+  grafo por su marca y modelo.
+  
+  Las acciones permitidas despues del prompt son las siguientes:
+  
+  > INICIALIZAR
+  
+  > AGREGAR NODO <etiqueta> <marca> <modelo>
+    Donde <etiqueta> es un nombre del nodo (puede ser el nombre de su usuario o
+      un identificador, no debe contener espacios)
+  
+  > AGREGAR ARISTA <etiqueta> <etiqueta>
+  
+  > BUSCAR <marca> <modelo>
+  =============================================================
+  BIENVENIDA
 
-puts "\n************************************************************\n"+
-    "Bienvenido al registro de computadoras de la red del LDC\n" +
-    "donde la red está descrita por un grafo no dirigido donde se\n"+
-    "puede añadir y buscar computadoras en la red como nodos en el\n"+
-    "grafo por su marca y modelo.\n\n"+
-    "Las acciones permitidas despues del prompt son las siguientes:\n"+
-    "> INICIALIZAR\n"+
-    "> AGREGAR <objeto> <param1> <param2>\n"+
-    "   Si <objeto> = nodo\n"+
-    "       <param1> : marca de la computadora\n"+
-    "       <param1> : modelo de la computadora\n"+
-    "   Si <objeto> = arista\n"+
-    "       <param1> : primer nodo de la arista\n"+
-    "       <param1> : segundo nodo de la arista\n"+
-    "> BUSCAR <marca> <modelo>\n"+
-    "*************************************************************\n\n"
-
-    
-while true
-    # break
-    print("> ")
-    input = gets.chomp.split
+  loop do
+    print("LDCNetwork> ")
+    input = gets.strip.split
     case input[0]
     when "INICIALIZAR"
-        grafo = GrafoNoDirigido.new
-        
-        
+      # Crea un nuevo grafo
+      @g = Graph.new
+
+      # Mantiene mapa de etiquetas a nodos
+      @nodes = {}
+
+      # Clase que realiza el DFS sobre el grafo
+      @dfs = DFS.new(@g)
     when "AGREGAR"
-        # Se atrapa una excepcion si el grafo no ha sido inicializado
-        begin
-        
+      # Se atrapa una excepción si el grafo no ha sido inicializado
+      begin
         case input[1]
-        when "nodo"
+        when "NODO"
 
-            if input.size < 4
-                puts "Debe introducir la informacion del nodo
-                Parametros:
-                <Marca> : Marca de la PC
-                <Modelo> : Modelo de la PC"
-                puts "Si introduce mas parametros, no seran considerados/"
-           else
-                nuevoNodo = Nodo.new(input[2],input[3])
-                
-                grafo.agregarNodo(nuevoNodo)
-            end
-            
-        when "arista"
-            
-            if input.size < 4
-                puts "Debe introducir los nodos pertenecientes a la arista
-                Parametros:
-                <nodo1> : primer nodo
-                <nodo2> : segundo nodo"
-                puts "Si introduce mas parametros, no seran considerados/"
-            elsif (!is_integer(input[2]) or !is_integer(input[3]))
-                puts "Error, los nodos deben ser numeros enteros"
-                
-            elsif (!grafo.existeNodo(input[2].to_i) or !grafo.existeNodo(input[3].to_i))
-                puts "Error, alguno de los nodos no pertenece al grafo"
-            else 
-                arista = Arista.new(input[2].to_i, input[3].to_i)
-                grafo.agregarArista(arista)
-            end
-            
+          if input.size < 5
+            puts <<~INFO
+              La accion AGREGAR NODO requiere de 3 parámetros:
+                <etiqueta> <marca> <modelo>
+            INFO
+            puts "Si introduce más parámetros, no serán considerados"
+          else
+            # Crea la PC y nodo con los parámetros dados
+            tag = input[2]
+            new_pc = PC.new(input[3],input[4])
+            new_node = Node.new(tag, new_pc)
+
+            # Agrega un nuevo nodo al grafo y al mapa de etiquetas
+            @g.add_node(new_node)
+            @nodes[tag] = new_node
+          end
+
+        when "ARISTA"
+          if input.size < 4
+            puts <<~INFO
+              La accion AGREGAR ARISTA requiere de 2 parámetros:
+                <etiqueta> <etiqueta>
+            INFO
+            puts "Si introduce más parámetros, no serán considerados"
+
+          elsif (!@nodes.member?(input[2]) || !@nodes.member?(input[3]))
+            puts "ERROR: Alguno de los nodos no pertenece al grafo"
+          else
+            tag1 = input[2]
+            tag2 = input[3]
+
+            # Agrega una arista entre los nodos indicados
+            @g.add_edge(@nodes[tag1], @nodes[tag2])
+          end
+
         else
-            puts "<objeto> debe ser nodo o arista."
+          puts "Uso: AGREGAR <NODO|ARISTA> [<parámetros>]"
         end
-        
-        rescue
-            puts "El grafo no existe. Inicialize el grafo."
-        end
-        
+      rescue
+        puts "ERROR: No se ha creado ningún grafo"
+      end
+
     when "BUSCAR"
-        # TODO
-        
+      if input.size < 3
+        puts <<~INFO
+          La accion BUSCAR requiere de 2 parámetros:
+            <marca> <modelo>
+        INFO
+        puts "Si introduce más parámetros, no serán considerados"
+      else
+        pc_to_seach = PC.new(input[1], input[2])
+        @dfs.search(pc_to_search)
+      end
+
+    when "MOSTRAR"
+      puts "#{@g}"
+
     when "SALIR"
-        break
+      break
+
     else
-        puts "Debe introducir de las acciones indicadas."
-        
+      puts "ERROR: Acción inválida"
+
     end
+  end
 end
-
-# para visulizar como queda el grafo despues de las pruebas
-puts grafo
-
