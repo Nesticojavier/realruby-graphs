@@ -12,8 +12,8 @@ class DFS
   end
 
   ##
+  # Busca el elemento dado en el grafo, usando el algoritmo de DFS.
   def search(el)
-    # Vacía el conjunto de visitados
     @graph.nodes.each do |u|
       if !@visited.member?(u)
         if dfs_visit(u, el)
@@ -21,8 +21,18 @@ class DFS
         end
       end
     end
+    false
   end
 
+  ##
+  # Función de ayuda para search, parte de la implementación del algoritmo
+  # de DFS.
+  #
+  # Visita recursivamente los nodos adyacentes de u y compara su atributo
+  # value con el hasta encontrarlo.
+  #
+  # Imprime por salida estándar cada nodo que visita y cuando resulta exitosa
+  # la búsqueda
   def dfs_visit(u, el)
     @visited.add(u)
 
@@ -35,10 +45,14 @@ class DFS
     # Itera sobre todos los adyacentes y los visita recursivamente
     @graph.adjacents(u).each do |v|
       if !@visited.member?(v)
-        dfs_visit(v, el)
+        dfs_visit(v, el) 
       end
     end
 
     nil
+  end
+
+  def reset
+    @visited.clear
   end
 end

@@ -95,7 +95,11 @@ if __FILE__ == $PROGRAM_NAME
         puts "Si introduce más parámetros, no serán considerados"
       else
         pc_to_search = PC.new(input[1], input[2])
-        @dfs.search(pc_to_search)
+        if !@dfs.search(pc_to_search)
+          puts "Ya se agotaron los elementos del grafo sobre los que buscar"
+          puts "Reiniciando la búsqueda"
+          @dfs.reset
+        end
       end
 
     when "MOSTRAR"
