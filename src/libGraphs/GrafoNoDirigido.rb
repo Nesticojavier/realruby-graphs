@@ -17,9 +17,13 @@ class GrafoNoDirigido
 
     def agregarArista(arista)
         # vertificar existencia de nodos
-        #TODO
         @@listaDeAdyacencia[arista.v].append(arista)
         @@listaDeAdyacencia[arista.u].append(arista.invert())
+    end
+
+    # comprobar la existencia de un nodo
+    def existeNodo(nodo)
+        return (0 <= nodo and nodo < @@listaDeAdyacencia.size)
     end
 
     # para visualizar el grafo como lista de adyacencia
@@ -55,12 +59,12 @@ class Arista
 end
 
 class Nodo
-    def initialize(param_ciudad, param_personas)
-        @ciudad = param_ciudad
-        @personas= param_personas
+    def initialize(marca, modelo)
+        @marca = marca
+        @modelo = modelo
     end
 
     def to_s
-        return "Ciudad: #@ciudad\nPersonas: #@personas"
+        return "Marca: #@marca\nModelo: #@modelo"
     end
 end
